@@ -9,3 +9,10 @@ WITH max_dep AS
 SELECT 
     ABS((SELECT max_sal from max_dep WHERE department = 'marketing')
         - (SELECT max_sal from max_dep WHERE department = 'engineering'))
+
+-- different approach
+SELECT 
+    ABS(MAX(CASE WHEN department = 'marketing' THEN salary ELSE NULL END)
+    - MAX(CASE WHEN department = 'engineering' THEN salary ELSE NULL END)) AS DIFF
+FROM db_employee de
+JOIN db_dept dd ON de.department_id = dd.id
