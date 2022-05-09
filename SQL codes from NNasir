@@ -1,0 +1,11 @@
+1. Salaries Differences 
+
+WITH max_dep AS
+    (SELECT department, max(salary) max_sal
+    FROM db_employee de
+    JOIN db_dept dd ON de.department_id = dd.id
+    GROUP BY department)
+    
+SELECT 
+    ABS((SELECT max_sal from max_dep WHERE department = 'marketing')
+        - (SELECT max_sal from max_dep WHERE department = 'engineering'))
