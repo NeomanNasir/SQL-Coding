@@ -16,3 +16,10 @@ SELECT
     - MAX(CASE WHEN department = 'engineering' THEN salary ELSE NULL END)) AS DIFF
 FROM db_employee de
 JOIN db_dept dd ON de.department_id = dd.id
+
+2. Employees Current Salary
+SELECT 
+    id, first_name, last_name, department_id, MAX(salary) current_salary
+FROM ms_employee_salary
+GROUP BY id
+ORDER BY id
