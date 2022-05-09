@@ -18,8 +18,17 @@ FROM db_employee de
 JOIN db_dept dd ON de.department_id = dd.id
 
 2. Employees Current Salary
+
 SELECT 
     id, first_name, last_name, department_id, MAX(salary) current_salary
 FROM ms_employee_salary
 GROUP BY id
 ORDER BY id
+
+3. Bikes Last Used
+
+select 
+    bike_number, max(end_time) last_used
+from dc_bikeshare_q1_2012
+group by bike_number
+order by max(end_time);
