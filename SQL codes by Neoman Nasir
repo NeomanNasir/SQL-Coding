@@ -32,3 +32,9 @@ select
 from dc_bikeshare_q1_2012
 group by bike_number
 order by max(end_time);
+
+4. Count the number of movies that Abigail Breslin nominated for oscar
+
+select count(*)
+from oscar_nominees
+where nominee = 'Abigail Breslin';
