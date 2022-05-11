@@ -46,3 +46,41 @@ select
 from facebook_posts fp
 join facebook_reactions fr on fp.post_id = fr.post_id
 where fr.reaction = 'heart';
+
+6. Users By Average Session Time
+
+-- key points: 
+-- Output the user_id and their average session time.
+-- consider only the latest page_load and earliest page_exit
+
+-- solution strategy: 
+-- 1. get data: user_id, date, exit for eache user by date
+-- 2. get data: user_id, date, load for eache user by date
+-- 3. join the load and exit table and calulate average session: exit - lower per user
+
+with exit as
+    (select 
+        user_id
+        , date(timestamp) as date
+        , min(timestamp) as exit
+    from facebook_web_log
+    where action = 'page_exit'
+    group by 1, 2)
+     
+    , load as
+    (select 
+        user_id
+        , date(timestamp) as date
+        , max(timestamp) as load
+    from facebook_web_log
+    where action = 'page_load'
+    group by 1, 2)
+    
+select
+    e.user_id
+    , avg(exit - load)
+from exit e
+join load l 
+    on e.user_id = l.user_id
+    and e.date = l.date 
+group by 1
