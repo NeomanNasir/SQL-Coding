@@ -84,3 +84,26 @@ join load l
     on e.user_id = l.user_id
     and e.date = l.date 
 group by 1
+
+7. Finding User Purchases
+
+-- key points: 
+-- need to identify returning active users
+-- A returning active user is a user that has made a second purchase within 7 days of any other of their purchases
+-- Output a list of user_ids of these returning active users.
+
+-- solution steps: 
+-- get second transation through a cte
+-- then print the distinct user_id where the diff is < 8
+
+with cte as
+    (select 
+        user_id
+        , created_at
+        , lead(created_at, 1) over(partition by user_id order by created_at) as next_transaction
+    from amazon_transactions)
+
+select 
+    distinct user_id
+from cte
+where next_transaction - created_at < 8;
